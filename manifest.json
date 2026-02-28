@@ -1,0 +1,57 @@
+{
+  "manifest_version": 3,
+  "name": "Subreddit Activity Lens",
+  "version": "0.2.0",
+  "description": "Adds quick posts/comments links and shows top active subreddits for Reddit users over the last 30 days.",
+  "minimum_chrome_version": "114",
+  "permissions": [
+    "storage"
+  ],
+  "icons": {
+    "16": "icons/icon-16x16.png",
+    "32": "icons/icon-32x32.png",
+    "48": "icons/icon-48x48.png",
+    "128": "icons/icon-128x128.png"
+  },
+  "action": {
+    "default_title": "Subreddit Activity Lens",
+    "default_popup": "popup/popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "activity-view.html",
+        "activity-view.js"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.reddit.com/*",
+        "https://reddit.com/*",
+        "https://new.reddit.com/*",
+        "https://old.reddit.com/*"
+      ],
+      "js": [
+        "shared/events.js",
+        "shared/constants.js",
+        "shared/utils.js",
+        "shared/logger.noop.js",
+        "core/cache.js",
+        "core/fetcher.js",
+        "core/search-source.js",
+        "core/aggregation.js",
+        "core/service.js",
+        "ui/renderer.js",
+        "ui/meta-links.js",
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}

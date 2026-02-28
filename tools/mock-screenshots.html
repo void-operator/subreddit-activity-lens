@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Subreddit Activity Lens (Mock Screenshot Page)</title>
+    <style>
+      :root {
+        --bg: #0b1416;
+        --panel: #0f1a1c;
+        --panel-2: #101f23;
+        --text: #e7ecef;
+        --muted: #9db0b6;
+        --muted-2: #7f949b;
+        --border: rgba(255, 255, 255, 0.08);
+
+        /* Used by the injected badge CSS (mirrors reddit-ish variables). */
+        --color-neutral-content-weak: #9db0b6;
+        --color-neutral-content-strong: #e7ecef;
+      }
+
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        margin: 0;
+        background: radial-gradient(1000px 600px at 20% 0%, rgba(58, 79, 207, 0.22), transparent 55%),
+          radial-gradient(900px 500px at 85% 10%, rgba(16, 185, 129, 0.13), transparent 55%),
+          var(--bg);
+        color: var(--text);
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      }
+
+      a {
+        color: #c4b5fd;
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+
+      .shell {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 24px 18px 40px;
+      }
+
+      .topbar {
+        background: color-mix(in srgb, var(--panel) 86%, transparent);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 14px 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 18px;
+        backdrop-filter: blur(10px);
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .logo {
+        width: 30px;
+        height: 30px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, rgba(58, 79, 207, 0.95), rgba(14, 116, 144, 0.85));
+        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.32);
+      }
+
+      .brand h1 {
+        margin: 0;
+        font-size: 14px;
+        letter-spacing: 0.2px;
+        color: var(--text);
+      }
+
+      .brand p {
+        margin: 0;
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 300px;
+        gap: 18px;
+        align-items: start;
+      }
+
+      .card {
+        background: linear-gradient(180deg, color-mix(in srgb, var(--panel) 94%, transparent), var(--panel-2));
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 16px 16px 14px;
+        box-shadow: 0 18px 45px rgba(0, 0, 0, 0.32);
+        backdrop-filter: blur(10px);
+      }
+
+      .meta {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+      }
+
+      .avatar {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(196, 181, 253, 0.9), rgba(236, 72, 153, 0.55));
+        border: 1px solid rgba(255, 255, 255, 0.14);
+      }
+
+      .meta-line {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35em;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.2;
+      }
+
+      .meta-line .user {
+        color: var(--text);
+        font-weight: 600;
+      }
+
+      .dot {
+        opacity: 0.6;
+        margin: 0 0.1em;
+      }
+
+      /* Mimic our injected meta links wrapper. */
+      .rab-meta-links {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35em;
+        white-space: nowrap;
+        opacity: 0.95;
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .rab-meta-links a {
+        color: #d8b4fe;
+      }
+      .rab-meta-links a:hover {
+        text-decoration: underline;
+      }
+      .rab-hidden-indicator {
+        display: inline-flex;
+        align-items: center;
+        margin-left: 0.35em;
+        font-size: 11px;
+        opacity: 0.85;
+      }
+
+      h2 {
+        margin: 0 0 10px;
+        font-size: 26px;
+        letter-spacing: -0.2px;
+      }
+
+      .body {
+        color: color-mix(in srgb, var(--text) 88%, transparent);
+        font-size: 14px;
+        line-height: 1.55;
+        margin-bottom: 10px;
+      }
+
+      .comment {
+        margin-top: 12px;
+        padding: 12px 12px 10px;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        background: rgba(0, 0, 0, 0.14);
+      }
+
+      .comment .comment-meta {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .comment .comment-meta .user {
+        color: var(--text);
+        font-weight: 600;
+      }
+
+      .comment .comment-text {
+        color: color-mix(in srgb, var(--text) 88%, transparent);
+        font-size: 13px;
+        line-height: 1.55;
+      }
+
+      .sidebar h3 {
+        margin: 0 0 10px;
+        font-size: 13px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .mod-list {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .mod {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 8px 10px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        background: rgba(0, 0, 0, 0.12);
+        color: var(--text);
+        font-size: 12px;
+      }
+
+      .mod .u {
+        color: var(--text);
+        font-weight: 600;
+      }
+
+      /* ---- Injected badge styles copied from extension renderer (static) ---- */
+      .rab-badge-root {
+        margin-top: 4px;
+      }
+      .rab-badge-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        align-items: center;
+      }
+      .rab-badge-chip {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        overflow: hidden;
+        white-space: nowrap;
+        font-size: 10.5px;
+        line-height: 1.2;
+        color: var(--color-neutral-content-strong, #1f2937);
+        text-decoration: none;
+      }
+      .rab-badge-chip .rab-sub {
+        background: color-mix(in srgb, var(--color-neutral-content-weak, #bcd0dd) 28%, transparent);
+        padding: 2px 7px;
+      }
+      .rab-badge-chip .rab-count {
+        background: color-mix(in srgb, #3a4fcf 85%, #000 15%);
+        color: #eef2ff;
+        padding: 2px 7px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .rab-badge-chip a {
+        color: inherit;
+        text-decoration: none;
+      }
+      .rab-badge-chip a:hover {
+        text-decoration: underline;
+      }
+      .rab-badge-chip .rab-sub a:hover {
+        text-decoration: none;
+      }
+      .rab-badge-chip .rab-divider {
+        opacity: 0.7;
+      }
+      .rab-state {
+        font-size: 11px;
+        opacity: 0.75;
+      }
+      .rab-scan-chip {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        padding: 2px 7px;
+        font-size: 10.5px;
+        line-height: 1.2;
+        color: var(--color-neutral-content-weak, #6b7280);
+        background: color-mix(in srgb, var(--color-neutral-content-weak, #bcd0dd) 18%, transparent);
+      }
+      .rab-more-chip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        appearance: none;
+        -webkit-appearance: none;
+        font-family: inherit;
+        border-radius: 999px;
+        box-sizing: border-box;
+        margin: 0 !important;
+        height: 17px !important;
+        padding: 0 7px !important;
+        min-width: 22px;
+        min-height: 0 !important;
+        font-size: 10.5px;
+        line-height: 1 !important;
+        color: var(--color-neutral-content-weak, #6b7280);
+        background: color-mix(in srgb, var(--color-neutral-content-weak, #bcd0dd) 18%, transparent);
+        border: 0;
+        cursor: pointer;
+      }
+      .rab-more-chip:hover {
+        filter: brightness(1.08);
+      }
+      .rab-scan-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        appearance: none;
+        -webkit-appearance: none;
+        font-family: inherit;
+        border-radius: 999px;
+        box-sizing: border-box;
+        margin: 0 !important;
+        height: 17px !important;
+        padding: 0 9px !important;
+        min-width: 40px;
+        min-height: 0 !important;
+        font-size: 10.5px;
+        line-height: 1 !important;
+        color: var(--color-neutral-content-weak, #6b7280);
+        background: color-mix(in srgb, var(--color-neutral-content-weak, #bcd0dd) 18%, transparent);
+        border: 0;
+        cursor: pointer;
+      }
+      .rab-scan-btn:hover {
+        filter: brightness(1.08);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <div class="topbar">
+        <div class="brand">
+          <div class="logo" aria-hidden="true"></div>
+          <div>
+            <h1>Mock Reddit Thread (Safe for Screenshots)</h1>
+            <p>All usernames, comments, and badge data are fake.</p>
+          </div>
+        </div>
+        <div style="color: var(--muted); font-size: 12px;">Dark theme preview</div>
+      </div>
+
+      <div class="grid">
+        <main class="card">
+          <div class="meta">
+            <div class="avatar" aria-hidden="true"></div>
+            <div class="meta-line">
+              <a class="user" href="https://www.reddit.com/user/lens_demo_user/" target="_blank" rel="noopener noreferrer">u/lens_demo_user</a>
+              <span class="dot">•</span>
+              <time datetime="2026-02-16T06:07:00Z">53 min ago</time>
+              <span class="dot">•</span>
+              <span class="rab-meta-links">
+                <a href="https://www.reddit.com/user/lens_demo_user/search/?q=%20&type=posts&sort=new&t=month" target="_blank" rel="noopener noreferrer">posts</a>
+                <span aria-hidden="true" style="opacity: 0.7;">|</span>
+                <a href="https://www.reddit.com/user/lens_demo_user/search/?q=%20&type=comments&sort=new&t=month" target="_blank" rel="noopener noreferrer">comments</a>
+                <span class="rab-hidden-indicator" title="Hidden profile" aria-label="Hidden profile">😎</span>
+              </span>
+            </div>
+          </div>
+
+          <h2>Do we think the billboard is working?</h2>
+          <div class="body">
+            Mock post body text. This page is only for taking Chrome Web Store screenshots without capturing real users.
+          </div>
+
+          <!-- Mock injected badges (expanded to show many subreddits). -->
+          <div class="rab-badge-root" data-rab-mounted-user="lens_demo_user">
+            <div class="rab-badge-row">
+              <span class="rab-badge-chip" title="Score 120: 6 posts + 57 comments">
+                <span class="rab-sub"><a href="https://www.reddit.com/r/technology" target="_blank" rel="noopener noreferrer">technology</a></span>
+                <span class="rab-count"><a href="#" target="_blank" rel="noopener noreferrer">6p</a><span class="rab-divider">•</span><a href="#" target="_blank" rel="noopener noreferrer">57c</a></span>
+              </span>
+              <span class="rab-badge-chip" title="Score 88: 4 posts + 40 comments">
+                <span class="rab-sub"><a href="https://www.reddit.com/r/AskReddit" target="_blank" rel="noopener noreferrer">AskReddit</a></span>
+                <span class="rab-count"><a href="#" target="_blank" rel="noopener noreferrer">4p</a><span class="rab-divider">•</span><a href="#" target="_blank" rel="noopener noreferrer">40c</a></span>
+              </span>
+              <span class="rab-badge-chip" title="Score 72: 3 posts + 33 comments">
+                <span class="rab-sub"><a href="https://www.reddit.com/r/programming" target="_blank" rel="noopener noreferrer">programming</a></span>
+                <span class="rab-count"><a href="#" target="_blank" rel="noopener noreferrer">3p</a><span class="rab-divider">•</span><a href="#" target="_blank" rel="noopener noreferrer">33c</a></span>
+              </span>
+              <span class="rab-badge-chip" title="Score 66: 2 posts + 31 comments">
+                <span class="rab-sub"><a href="https://www.reddit.com/r/worldnews" target="_blank" rel="noopener noreferrer">worldnews</a></span>
+                <span class="rab-count"><a href="#" target="_blank" rel="noopener noreferrer">2p</a><span class="rab-divider">•</span><a href="#" target="_blank" rel="noopener noreferrer">31c</a></span>
+              </span>
+              <span class="rab-badge-chip" title="Score 55: 2 posts + 24 comments">
+                <span class="rab-sub"><a href="https://www.reddit.com/r/movies" target="_blank" rel="noopener noreferrer">movies</a></span>
+                <span class="rab-count"><a href="#" target="_blank" rel="noopener noreferrer">2p</a><span class="rab-divider">•</span><a href="#" target="_blank" rel="noopener noreferrer">24c</a></span>
+              </span>
+              <span class="rab-badge-chip" title="Score 51: 1 posts + 23 comments">
+                <span class="rab-sub"><a href="https://www.reddit.com/r/science" target="_blank" rel="noopener noreferrer">science</a></span>
+                <span class="rab-count"><a href="#" target="_blank" rel="noopener noreferrer">1p</a><span class="rab-divider">•</span><a href="#" target="_blank" rel="noopener noreferrer">23c</a></span>
+              </span>
+              <span class="rab-badge-chip" title="Score 44: 1 posts + 18 comments">
+                <span class="rab-sub"><a href="https://www.reddit.com/r/gaming" target="_blank" rel="noopener noreferrer">gaming</a></span>
+                <span class="rab-count"><a href="#" target="_blank" rel="noopener noreferrer">1p</a><span class="rab-divider">•</span><a href="#" target="_blank" rel="noopener noreferrer">18c</a></span>
+              </span>
+              <span class="rab-badge-chip" title="Score 39: 0 posts + 19 comments">
+                <span class="rab-sub"><a href="https://www.reddit.com/r/todayilearned" target="_blank" rel="noopener noreferrer">todayilearned</a></span>
+                <span class="rab-count"><a href="#" target="_blank" rel="noopener noreferrer">0p</a><span class="rab-divider">•</span><a href="#" target="_blank" rel="noopener noreferrer">19c</a></span>
+              </span>
+              <span class="rab-badge-chip" title="Score 37: 1 posts + 16 comments">
+                <span class="rab-sub"><a href="https://www.reddit.com/r/music" target="_blank" rel="noopener noreferrer">music</a></span>
+                <span class="rab-count"><a href="#" target="_blank" rel="noopener noreferrer">1p</a><span class="rab-divider">•</span><a href="#" target="_blank" rel="noopener noreferrer">16c</a></span>
+              </span>
+              <span class="rab-badge-chip" title="Score 31: 1 posts + 13 comments">
+                <span class="rab-sub"><a href="https://www.reddit.com/r/sports" target="_blank" rel="noopener noreferrer">sports</a></span>
+                <span class="rab-count"><a href="#" target="_blank" rel="noopener noreferrer">1p</a><span class="rab-divider">•</span><a href="#" target="_blank" rel="noopener noreferrer">13c</a></span>
+              </span>
+              <span class="rab-badge-chip" title="Score 29: 0 posts + 14 comments">
+                <span class="rab-sub"><a href="https://www.reddit.com/r/travel" target="_blank" rel="noopener noreferrer">travel</a></span>
+                <span class="rab-count"><a href="#" target="_blank" rel="noopener noreferrer">0p</a><span class="rab-divider">•</span><a href="#" target="_blank" rel="noopener noreferrer">14c</a></span>
+              </span>
+              <span class="rab-badge-chip" title="Score 24: 0 posts + 12 comments">
+                <span class="rab-sub"><a href="https://www.reddit.com/r/cooking" target="_blank" rel="noopener noreferrer">cooking</a></span>
+                <span class="rab-count"><a href="#" target="_blank" rel="noopener noreferrer">0p</a><span class="rab-divider">•</span><a href="#" target="_blank" rel="noopener noreferrer">12c</a></span>
+              </span>
+              <button type="button" class="rab-more-chip" title="Show more">+</button>
+              <span class="rab-scan-chip" title="Scanning for more activity…">scanning…</span>
+            </div>
+          </div>
+
+          <div class="comment">
+            <div class="comment-meta">
+              <span class="user">u/mock_user_01</span>
+              <span class="dot">•</span>
+              <time datetime="2026-02-16T06:22:00Z">38 min ago</time>
+            </div>
+            <div class="comment-text">
+              Mock comment: “This is a sample thread. All content is fabricated for screenshots.”
+            </div>
+          </div>
+
+          <div class="comment">
+            <div class="comment-meta">
+              <span class="user">u/mock_user_02</span>
+              <span class="dot">•</span>
+              <time datetime="2026-02-16T06:29:00Z">31 min ago</time>
+            </div>
+            <div class="comment-text">
+              Mock comment: “The badges are the interesting part. Clicking a badge can jump to posts/comments in that subreddit.”
+            </div>
+          </div>
+        </main>
+
+        <aside class="card sidebar">
+          <h3>Moderators</h3>
+          <div class="mod-list">
+            <div class="mod">
+              <span class="u">u/mod_alpha</span>
+              <button type="button" class="rab-scan-btn" title="Auto-scan is disabled in the Moderators pane. Click to scan.">scan</button>
+            </div>
+            <div class="mod">
+              <span class="u">u/mod_beta</span>
+              <button type="button" class="rab-scan-btn" title="Auto-scan is disabled in the Moderators pane. Click to scan.">scan</button>
+            </div>
+            <div class="mod">
+              <span class="u">u/mod_gamma</span>
+              <button type="button" class="rab-scan-btn" title="Auto-scan is disabled in the Moderators pane. Click to scan.">scan</button>
+            </div>
+            <div class="mod">
+              <span class="u">u/mod_delta</span>
+              <button type="button" class="rab-scan-btn" title="Auto-scan is disabled in the Moderators pane. Click to scan.">scan</button>
+            </div>
+            <div class="mod">
+              <span class="u">u/mod_epsilon</span>
+              <button type="button" class="rab-scan-btn" title="Auto-scan is disabled in the Moderators pane. Click to scan.">scan</button>
+            </div>
+          </div>
+          <div style="margin-top: 12px; color: var(--muted); font-size: 12px; line-height: 1.45;">
+            This sidebar section is intentionally manual-only (scan button) to avoid burst auto-scans.
+          </div>
+        </aside>
+      </div>
+    </div>
+  </body>
+</html>

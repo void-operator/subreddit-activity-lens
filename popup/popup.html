@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Subreddit Activity Lens</title>
+    <link rel="stylesheet" href="popup.css">
+  </head>
+  <body>
+    <main class="root">
+      <h1>Subreddit Activity Lens</h1>
+      <p class="subtitle">Activity badges</p>
+      <p class="meta">
+        <span id="version">v0.0.0</span>
+      </p>
+
+      <section class="group">
+        <h2 class="group-title">Scanning</h2>
+        <label class="opt">
+          <input id="auto-scan" type="checkbox">
+          Auto-scan
+        </label>
+
+        <div class="row">
+          <button id="run-page" type="button">Scan current page</button>
+          <button id="cancel-inflight" type="button">Cancel active scans</button>
+        </div>
+
+        <p class="diag">Currently scanning: <span id="inflight">?</span></p>
+      </section>
+
+      <section class="group">
+        <h2 class="group-title">Display</h2>
+        <label class="opt">
+          <input id="hide-badges" type="checkbox">
+          Hide badges
+        </label>
+
+        <label class="opt">
+          <input id="show-hidden" type="checkbox">
+          Show hidden profile indicator
+        </label>
+      </section>
+
+      <section class="group">
+        <h2 class="group-title">Maintenance</h2>
+        <button id="clear-cache" type="button">Clear activity cache</button>
+      </section>
+
+      <p id="status" class="status">Ready.</p>
+    </main>
+    <script src="popup.js"></script>
+  </body>
+</html>

@@ -1,0 +1,16 @@
+.DS_Store
+Thumbs.db
+
+*.log
+
+# Build / packaging artifacts
+*.zip
+*.crx
+
+# Common JS deps (not used today, but safe)
+node_modules/
+dist/
+build/
+
+# Local-only scratch
+*.local.*
